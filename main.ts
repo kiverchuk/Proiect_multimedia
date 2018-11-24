@@ -113,7 +113,9 @@ document.addEventListener('DOMContentLoaded', function () {
             
             //ctx.beginPath();
             //ctx.rect(this.x,this.y , this.h, this.w);
-            
+                ctx.clearRect( this.x, this.y, this.h, this.w);
+                this.x += 1;
+                this.y =
                 ctx.drawImage(coinimg, 0, coi[get_coin()], 63, 61, this.x, this.y, this.h, this.w);
             
            // ctx.fillStyle = "red";
@@ -175,63 +177,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             //coo = null;
                         
                     },coin_delta)
-      
-                    var spawn_coin2 = setInterval(function(){
-                        
-                        let coo = new coin(100 ,30,30);
-                        colist.push(coo);
-                        //coo = null;
-                    
-                },coin_delta) 
-                var spawn_coin3 = setInterval(function(){
-                        
-                    let coo = new coin(100 ,30,30);
-                    colist.push(coo);
-                    //coo = null;
-                
-            },coin_delta) 
-            var spawn_coin4 = setInterval(function(){
-                        
-                let coo = new coin(100 ,30,30);
-                colist.push(coo);
-                //coo = null;
-            
-        },coin_delta)    
-        var spawn_coin5 = setInterval(function(){
-                        
-            let coo = new coin(100 ,30,30);
-            colist.push(coo);
-            //coo = null;
-        
-    },coin_delta) 
-    var spawn_coin22 = setInterval(function(){
-                        
-        let coo = new coin(100 ,30,30);
-        colist.push(coo);
-        //coo = null;
-    
-},coin_delta) 
-var spawn_coin33 = setInterval(function(){
-        
-    let coo = new coin(100 ,30,30);
-    colist.push(coo);
-    //coo = null;
 
-},coin_delta) 
-var spawn_coin44 = setInterval(function(){
         
-let coo = new coin(100 ,30,30);
-colist.push(coo);
-//coo = null;
-
-},coin_delta)    
-var spawn_coin55 = setInterval(function(){
-        
-let coo = new coin(100 ,30,30);
-colist.push(coo);
-//coo = null;
-
-},coin_delta)          
                    // spawn_coin;         
     clearInterval(spawn_coin);
 
@@ -263,7 +210,7 @@ colist.push(coo);
             //miscarea si previne esirea din diapazonu hartii
             if (x>0 && y>0 && x < canvas.width - frameWidth && y < canvas.height - frameHeight)
             switch (i){
-                
+                 
                 case 0 :
                     y -= pas;
                     break;
