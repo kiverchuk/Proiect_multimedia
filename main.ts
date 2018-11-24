@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //ctx.rect(this.x,this.y , this.h, this.w);
                 ctx.clearRect( this.x, this.y, this.h, this.w);
                 this.x += 1;
-                this.y =
+                this.y += 1;
                 ctx.drawImage(coinimg, 0, coi[get_coin()], 63, 61, this.x, this.y, this.h, this.w);
             
            // ctx.fillStyle = "red";
