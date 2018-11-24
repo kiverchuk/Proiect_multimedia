@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    //trei.traiincaodata//dupa inchidere
+    //trei.traiincaodata//dupa inchidere 
     //classa monetei. ce, unde si cum
     class coin{
         public x:number;
