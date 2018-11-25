@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var speed = speed_start;
     var score = 0;
     var ingame = false;
-    var coin_delta = 1;
+    var coin_delta = 5000;
     var scor = document.querySelector(".score");
     var newgame = document.querySelector("#newg");
     var continu = document.querySelector("#continue");
@@ -64,22 +64,48 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // timer
     var countdownNumberEl = document.getElementById('countdown-number');
-    var countdown = 100;
+    var countdown_start = 10; //limitele secundomerului
+    var countdown = countdown_start;
     countdownNumberEl.textContent = countdown.toString();
-    timerr(true);
+    var timer;
+    timerr(false);
     function timerr(is) {
         if (is)
-            var timer = setInterval(function () {
-                countdown = --countdown <= 0 ? 100 : countdown;
+            timer = setInterval(function () {
+                countdown = --countdown <= 0 ? countdown_start : countdown;
                 countdownNumberEl.textContent = countdown.toString();
             }, 1000);
         else
             clearInterval(timer);
     }
-    // var style = document.createElement('style');
-    // style.type = 'text/css';
-    // var keyFrames = 'animation: countdown A_DYNAMIC_VALUE linear infinite forwards;';
-    // style.innerHTML = keyFrames.replace(/A_DYNAMIC_VALUE/g, "50s");
+    //var style_anim = document.createElement('style');
+    var style_anim = document.querySelector(".style_d");
+    //style_anim.type = 'text/css';
+    //var keyFrames = 
+    style_anim.innerHTML = '.animated1{animation: countdown ' + countdown_start.toString() + 's linear infinite forwards;}';
+    var secundamer = document.querySelector("#timer circle");
+    secundamer.classList.add("animated1");
+    secundamer.classList.remove("animated1");
+    secundamer.classList.add("animated1");
+    secundamer.style.animationPlayState = "paused";
+    //oprirea, inceperea animatiei svg timer
+    var timer1 = document.querySelector(".s_t");
+    var i = 1;
+    timer1.addEventListener("click", function () {
+        if (i == 0) {
+            secundamer.style.animationPlayState = "paused";
+            timerr(false);
+            i++;
+        }
+        else {
+            secundamer.style.animationPlayState = "running";
+            timerr(true);
+            i = 0;
+        }
+        //console.log("rabotaet");
+    });
+    //timer.pauseAnimations();
+    //trei.traiincaodata//dupa inchidere/superю
     //classa monetei. ce, unde si cum
     var coin = /** @class */ (function () {
         function coin(scr, h, w) {
@@ -90,6 +116,9 @@ document.addEventListener('DOMContentLoaded', function () {
             this.score = scr;
             //ctx.beginPath();
             //ctx.rect(this.x,this.y , this.h, this.w);
+            ctx.clearRect(this.x, this.y, this.h, this.w);
+            this.x += 1;
+            this.y += 1;
             ctx.drawImage(coinimg, 0, coi[get_coin()], 63, 61, this.x, this.y, this.h, this.w);
             // ctx.fillStyle = "red";
             // ctx.fill();
@@ -133,46 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // coo = new coin(100 ,30,30);
     // colist.push(coo);
     var spawn_coin = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin2 = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin3 = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin4 = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin5 = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin22 = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin33 = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin44 = setInterval(function () {
-        var coo = new coin(100, 30, 30);
-        colist.push(coo);
-        //coo = null;
-    }, coin_delta);
-    var spawn_coin55 = setInterval(function () {
         var coo = new coin(100, 30, 30);
         colist.push(coo);
         //coo = null;

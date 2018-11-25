@@ -7,14 +7,16 @@
 
 </head>
 <body>
+    <style type="text/css" class="style_d"></style>
     <div class="container">
         <div class="score" style="position: relative;">0</div>
         <div id="countdown">
             <div id="countdown-number"></div>
-            <svg>
+            <svg id="timer">
               <circle r="18" cx="20" cy="20"></circle>
             </svg>
         </div>
+        <button class="s_t">start/stop</button>
        <div style="position: relative">
             <canvas id="myCanvas" width="600" height="600" style="border: 1px solid grey; z-index: 0; position: absolute" ></canvas>
             <canvas id="myCanvas2" width="600" height="600" style="border: 1px solid grey; z-index: 1; position: absolute" ></canvas>
