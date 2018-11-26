@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // timer
     var countdownNumberEl = document.getElementById('countdown-number');
-    var countdown_start = 10; //limitele secundomerului
+    var countdown_start = 20; //limitele secundomerului
     var countdown = countdown_start;
     countdownNumberEl.textContent = countdown.toString();
     var timer;
@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
     //var style_anim = document.createElement('style');
     var style_anim = document.querySelector(".style_d");
     //style_anim.type = 'text/css';
-    //var keyFrames = 
     style_anim.innerHTML = '.animated1{animation: countdown ' + countdown_start.toString() + 's linear infinite forwards;}';
     var secundamer = document.querySelector("#timer circle");
     secundamer.classList.add("animated1");
