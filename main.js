@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //}
         //}
         colist = [];
+        svg_tim("9");
     });
     continu.addEventListener("click", function () {
         console.log("continue");
@@ -52,10 +53,12 @@ document.addEventListener('DOMContentLoaded', function () {
             colist.push(coo);
             //coo = null;        
         }, coin_delta);
+        svg_tim("1");
     });
     reiting.addEventListener("click", function () {
         console.log("reiting");
         menu.classList.add("unshow");
+        //svg_tim("1");
     });
     function pause() {
         menu.classList.remove("unshow");
@@ -78,31 +81,55 @@ document.addEventListener('DOMContentLoaded', function () {
         else
             clearInterval(timer);
     }
-    //var style_anim = document.createElement('style');
-    var style_anim = document.querySelector(".style_d");
-    //style_anim.type = 'text/css';
-    style_anim.innerHTML = '.animated1{animation: countdown ' + countdown_start.toString() + 's linear infinite forwards;}';
+    //setarea animatiei css
+    //var style_anim = ;
+    document.querySelector(".style_d").innerHTML = '.animated1{animation: countdown ' + countdown_start.toString() + 's linear infinite forwards;}';
     var secundamer = document.querySelector("#timer circle");
     secundamer.classList.add("animated1");
-    secundamer.classList.remove("animated1");
-    secundamer.classList.add("animated1");
     secundamer.style.animationPlayState = "paused";
+    //secundamer.classList.remove("animated1");secundamer.classList.add("animated1");
+    // secundamer.style.animationPlayState = "paused";
     //oprirea, inceperea animatiei svg timer
-    var timer1 = document.querySelector(".s_t");
-    var i = 1;
-    timer1.addEventListener("click", function () {
-        if (i == 0) {
-            secundamer.style.animationPlayState = "paused";
-            timerr(false);
-            i++;
+    // var timer1 = document.querySelector(".s_t");
+    // let i = 1;
+    function svg_tim(what) {
+        switch (what) {
+            case "0":
+                secundamer.style.animationPlayState = "paused";
+                timerr(false);
+                break;
+            case "1":
+                secundamer.style.animationPlayState = "running";
+                timerr(true);
+                break;
+            case "9":
+                timerr(false);
+                countdown = countdown_start;
+                countdownNumberEl.textContent = countdown.toString();
+                secundamer.classList.remove("animated1");
+                secundamer.style.animationPlayState = "running";
+                setTimeout(function () {
+                    secundamer.classList.add("animated1");
+                }, 1);
+                timerr(true);
+                break;
         }
-        else {
-            secundamer.style.animationPlayState = "running";
-            timerr(true);
-            i = 0;
-        }
-        //console.log("rabotaet");
-    });
+    }
+    ;
+    /*
+        timer1.addEventListener("click",function(){
+            if(i==0){
+                secundamer.style.animationPlayState = "paused";
+                timerr(false);
+                i++;
+            }
+            else{
+                secundamer.style.animationPlayState = "running";
+                timerr(true);
+                i=0;
+            }
+            //console.log("rabotaet");
+        });*/
     //timer.pauseAnimations();
     //trei.traiincaodata//dupa inchidere/superю
     //classa monetei. ce, unde si cum
@@ -296,6 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             else if (c == 80) {
                 pause();
+                svg_tim("0");
             }
     });
 });
