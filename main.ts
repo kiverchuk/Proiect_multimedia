@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    var judete: any = `{    "1":[0,100],
+                            "2":[61,200],
+                            "3":[122,300],
+                            "4":[183,400],
+                            "5":[224,0]
+   }`;
+
 
 
     const canvas = <HTMLCanvasElement> document.getElementById("myCanvas");
@@ -12,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     coinimg.src = 'img/coins.jpg';
     var animashka:any;
     var fh:Array<number> = new Array(0,64,128,192) // date de axa y in sprite
-    var coi:Array<number> = new Array(0,61,122,183,244) // date de axa y in sprite
+    var coi:Array<number> = new Array(0,61,122,183,244) // date de axa y in sprite monete
     var x:number = 120;
     var y:number = 25;
     var pas:number = 3;
@@ -29,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var continu = document.querySelector("#continue");
     var reiting = document.querySelector("#reiting");
     var menu = document.querySelector("#allthethings");
+    
 
     newgame.addEventListener("click",function(){
         console.log("newg");
@@ -85,11 +93,17 @@ document.addEventListener('DOMContentLoaded', function () {
     var timer;
 
     timerr(false);
+    //inscrierea cifrei in timer svgz
     function timerr(is){
         if(is)
         timer = setInterval(function() {
+            //if (countdown <= 0){
+            //    svg_tim("0");
+            //    alert("Game over");
+            //}
             countdown = --countdown <= 0 ? countdown_start : countdown;   
             countdownNumberEl.textContent = countdown.toString();
+            
         }, 1000);
         else clearInterval(timer);
     }
@@ -240,8 +254,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //coinimg.onload = function(){};
 
+    
 
 
+    // function sleep(ms) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    //   }
+      
+    //   async function demo() {
+    //     console.log('Taking a break...');
+    //     await sleep(10000);
+    //     console.log('Two seconds later');
+    //   }
+      
+    //   demo();
+
+    
+    function sleepFor( sleepDuration ){
+        var now = new Date().getTime();
+        while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+    }
+
+
+
+    //function sleepThenAct(){ sleepFor(2000); console.log("hello js sleep !"); }
+    // var timer1 = document.querySelector(".s_t");
+    // timer1.addEventListener("click",function(){
+    //     for(let i=0;i<10;i++){
+    //         sleepFor(1000); console.log("hello js sleep !");
+    //     }
+    // });
+
+
+ function plusplus(ii){
+    setTimeout(function(){ii++}, 1000)
+    return ii;
+ }
     function move(i:number){
         clearInterval(animashka);
         var shift = 0;          //start pe axa x din sprit
@@ -292,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // verifica daca elementele se intersecteaza cu personaj si le sterg din lista
             for (let a=0;a<colist.length;a++){
+                console.log(colist[a]);
                 if (colist[a].intersection(x,y,frameHeight,frameWidth)){
                     colist.splice(a,1);
                    // console.log('calcat')

@@ -72,9 +72,14 @@ document.addEventListener('DOMContentLoaded', function () {
     countdownNumberEl.textContent = countdown.toString();
     var timer;
     timerr(false);
+    //inscrierea cifrei in timer svgz
     function timerr(is) {
         if (is)
             timer = setInterval(function () {
+                //if (countdown <= 0){
+                //    svg_tim("0");
+                //    alert("Game over");
+                //}
                 countdown = --countdown <= 0 ? countdown_start : countdown;
                 countdownNumberEl.textContent = countdown.toString();
             }, 1000);
@@ -195,6 +200,31 @@ document.addEventListener('DOMContentLoaded', function () {
     // spawn_coin;         
     clearInterval(spawn_coin);
     //coinimg.onload = function(){};
+    // function sleep(ms) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    //   }
+    //   async function demo() {
+    //     console.log('Taking a break...');
+    //     await sleep(10000);
+    //     console.log('Two seconds later');
+    //   }
+    //   demo();
+    function sleepFor(sleepDuration) {
+        var now = new Date().getTime();
+        while (new Date().getTime() < now + sleepDuration) { /* do nothing */ }
+    }
+    //function sleepThenAct(){ sleepFor(2000); console.log("hello js sleep !"); }
+    var timer1 = document.querySelector(".s_t");
+    timer1.addEventListener("click", function () {
+        for (var i = 0; i < 10; i++) {
+            sleepFor(1000);
+            console.log("hello js sleep !");
+        }
+    });
+    function plusplus(ii) {
+        setTimeout(function () { ii++; }, 1000);
+        return ii;
+    }
     function move(i) {
         clearInterval(animashka);
         var shift = 0; //start pe axa x din sprit
@@ -243,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //console.log(x+":"+y)
             // verifica daca elementele se intersecteaza cu personaj si le sterg din lista
             for (var a = 0; a < colist.length; a++) {
+                console.log(colist[a]);
                 if (colist[a].intersection(x, y, frameHeight, frameWidth)) {
                     colist.splice(a, 1);
                     // console.log('calcat')
