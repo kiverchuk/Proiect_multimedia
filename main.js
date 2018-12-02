@@ -13,14 +13,16 @@ document.addEventListener('DOMContentLoaded', function () {
     var animashka;
     var fh = new Array(0, 64, 128, 192); // date de axa y in sprite
     //var coi:Array<number> = new Array(0,61,122,183,244) // date de axa y in sprite monete
-    var x = 120;
-    var y = 25;
+    var x = 1;
+    var y = 1;
     var pas = 3;
     var speed_start = 20;
-    var coin_delta = 1000;
+    var coin_delta = 5000;
     var speed = speed_start;
     var score = 0;
     var ingame = false;
+    var colist = [];
+    var countdown_start = 15; //limitele secundomerului
     //console.log(obj[Math.round(Math.random()*4+1)][1]);
     var scor = document.querySelector(".score");
     var newgame = document.querySelector("#newg");
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var menu1_2 = document.querySelector("#allthethings1");
     var menu2_2 = document.querySelector("#allthethings2");
     var menuvid = document.querySelector(".exitvideo");
+    var ok = document.querySelector(".ok");
     var spawn_coin;
     newgame.addEventListener("click", function () {
         console.log("newg");
@@ -71,15 +74,27 @@ document.addEventListener('DOMContentLoaded', function () {
         var xx = document.getElementById("vidioshka");
         xx.pause();
     });
-    function pauseg() {
-        menu.classList.remove("unshow");
+    ok.addEventListener("click", function () {
+        console.log("fdgfh");
+        pauseg(false);
+    });
+    function pauseg(g_o) {
+        if (g_o) {
+            document.querySelector("#allthethings3").classList.remove("unshow");
+            menu.classList.add("unshow");
+            stop_cadru(directiaanimatiei);
+        }
+        else {
+            menu.classList.remove("unshow");
+            document.querySelector("#allthethings3").classList.add("unshow");
+        }
         ingame = false;
         clearInterval(spawn_coin);
         pausestart();
+        clearInterval(animashka);
     }
     // timer
     var countdownNumberEl = document.getElementById('countdown-number');
-    var countdown_start = 20; //limitele secundomerului
     var countdown = countdown_start;
     countdownNumberEl.textContent = countdown.toString();
     var timer;
@@ -89,16 +104,27 @@ document.addEventListener('DOMContentLoaded', function () {
         if (is)
             timer = setInterval(function () {
                 if (countdown - 1 <= 0) {
-                    pauseg();
-                    svg_tim("0");
-                    playstop();
-                    alert("Game over");
+                    gameover();
                 }
                 countdown = --countdown <= 0 ? countdown_start : countdown;
                 countdownNumberEl.textContent = countdown.toString();
             }, 1000);
         else
             clearInterval(timer);
+    }
+    function gameover() {
+        pauseg(true);
+        playstop();
+        countdownNumberEl.textContent = "0";
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx2.clearRect(0, 0, canvas.width, canvas.height);
+        colist = [];
+        svg_tim("0");
+        score = 0;
+        scor.innerHTML = "0";
+        x = 1;
+        y = 1;
+        //alert("Game over");
     }
     //setarea animatiei css
     //var style_anim = ;
@@ -173,10 +199,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 || x1 >= this.x && x1 <= this.x + this.h && y1 + h1 >= this.y && y1 + h1 <= this.y + this.h
                 || x1 >= this.x && x1 <= this.x + this.w && y1 >= this.y && y1 <= this.y + this.h
                 || x1 + w1 >= this.x && x1 + w1 <= this.x + this.w && y1 >= this.y && y1 <= this.y + this.h) {
-                //console.log("ggg");
+                svg_tim("9");
                 ctx.clearRect(this.x, this.y, this.h, this.w);
                 score += this.score;
-                console.log(this.score);
                 if (this.score == 0) {
                     setviteza(false);
                     setTimeout(function () {
@@ -190,6 +215,9 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         return coin;
     }());
+    function resettimer() {
+        countdown = countdown_start;
+    }
     function get_coin() {
         var n = Math.round(Math.random() * 100);
         if (n >= 0 && n <= 40)
@@ -220,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     // generarea monetelor, adaugarea acestor in lista
-    var colist = [];
     // let coo = new coin(100 ,30,30);
     // colist.push(coo);
     // coo = new coin(100 ,30,30);
@@ -386,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 prev_vode = 0;
             }
             else if (c == 80) {
-                pauseg();
+                pauseg(false);
                 svg_tim("0");
             }
     });

@@ -9,7 +9,7 @@
 <body>
     <style type="text/css" class="style_d"></style>
     <div class="container">
-        <div class="score" style="position: relative;">0</div>
+        <div style="position: relative;">Score: <div class="score" style="margin-left: 55px;margin-top: -23px;">0</div></div> 
         <div id="countdown">
             <div id="countdown-number"></div>
             <svg id="timer">
@@ -30,20 +30,19 @@
                 <div id="newg"><p>NEW GAME</p></div>
                 <div id="continue"><p>Continue</p></div>
                 <div id="reiting"><p>How to play</p></div>
-                <!-- <div id="credits"><p>CREDITS</p></div> -->
-                <!-- <div id="right"></div> -->
-                
-                <!-- <div id="exit"></div>
-                <div id="circle"></div> -->
                 </div>
                 <div class="unshow" id="allthethings2" style="z-index: 2;" >
                     <video id="vidioshka"width="400" height="300" controls src="https://www.w3schools.com/html/mov_bbb.mp4"></video>
                     <button class="exitvideo">Exit</button>
-                </div> 
+                </div>
+                
             </div>
-            
-            <audio controls id="audiostart" style="display: none;" src="https://www.w3schools.com/html/horse.ogg"></audio>
-            <!-- <audio controls id="audioend" style="display: none;"><source src="https://www.w3schools.com/html/horse.ogg"></audio> -->
+            <div class="unshow" id="allthethings3" style="z-index: 3;background: black;opacity: 0.6;height: 150px;width: 150px;padding: 45px 35px 35px 35px;margin-left: 210px;position: relative;top: 190px;" >
+                Game Over
+                <button class="ok" style="margin-left: 20px;">OK</button>
+            </div>
+            <audio controls id="audiostart" style="display: none;" src="music.mp3" volume="0,1" loop></audio>
+            <audio controls id="audiostop" style="display: none;" src="game_over.mp3"></audio>
         </div>
         
     </div>
