@@ -1,14 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    var judete: any = `{    "1":[0,100],
+    var monete: any = `{    "1":[0,100],
                             "2":[61,200],
                             "3":[122,300],
                             "4":[183,400],
-                            "5":[224,0]
+                            "5":[244,0]
    }`;
 
 
-
+    var obj = JSON.parse(monete);
+    //console.log(obj[2][1]);
     const canvas = <HTMLCanvasElement> document.getElementById("myCanvas");
     var ctx = canvas.getContext("2d");
     const canvas2 = <HTMLCanvasElement> document.getElementById("myCanvas2");
@@ -19,25 +20,29 @@ document.addEventListener('DOMContentLoaded', function () {
     coinimg.src = 'img/coins.jpg';
     var animashka:any;
     var fh:Array<number> = new Array(0,64,128,192) // date de axa y in sprite
-    var coi:Array<number> = new Array(0,61,122,183,244) // date de axa y in sprite monete
+    //var coi:Array<number> = new Array(0,61,122,183,244) // date de axa y in sprite monete
     var x:number = 120;
     var y:number = 25;
     var pas:number = 3;
     var speed_start:number = 20;
+    var coin_delta:number = 1000;
     var speed:number = speed_start;
     var score:number = 0;
     var ingame:boolean = false;
-    var coin_delta:number = 5000;
+    
 
-
+    //console.log(obj[Math.round(Math.random()*4+1)][1]);
     
     var scor = document.querySelector(".score");
     var newgame = document.querySelector("#newg");
     var continu = document.querySelector("#continue");
     var reiting = document.querySelector("#reiting");
     var menu = document.querySelector("#allthethings");
+    var menu1_2 = document.querySelector("#allthethings1");
+    var menu2_2 = document.querySelector("#allthethings2");
+    var menuvid = document.querySelector(".exitvideo");
     
-
+    var spawn_coin;
     newgame.addEventListener("click",function(){
         console.log("newg");
         menu.classList.add("unshow");
@@ -45,41 +50,44 @@ document.addEventListener('DOMContentLoaded', function () {
         score = 0;
         speed = speed_start;
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        spawn_coin = setInterval(function(){                        
-                let coo = new coin(100 ,30,30);
+        spawn_coin = setInterval(function(){    
+                let whatmoney = get_coin();                    
+                let coo = new coin(obj[whatmoney][1] ,30,30,whatmoney);
                 colist.push(coo);
-                //coo = null;        
             },coin_delta);
-        //for (let a=0;a<colist.length;a=0){
-            //if (colist[a].intersection(x,y,frameHeight,frameWidth)){
-                //colist.splice(a,1);
-                // console.log('calcat')
-            //}
-                
-        //}
         colist=[];
         svg_tim("9");
+        playstart();
     })
     continu.addEventListener("click",function(){
         console.log("continue");
         menu.classList.add("unshow");
         ingame = true;
-        spawn_coin = setInterval(function(){                        
-            let coo = new coin(100 ,30,30);
+        spawn_coin = setInterval(function(){ 
+            let whatmoney = get_coin(); 
+            let coo = new coin(obj[whatmoney][1] ,30,30,whatmoney);
             colist.push(coo);
-            //coo = null;        
         },coin_delta);
         svg_tim("1");
+        playstart();
     })
     reiting.addEventListener("click",function(){
         console.log("reiting");
-        menu.classList.add("unshow");
-        //svg_tim("1");
+        menu1_2.classList.add("unshow");
+        menu2_2.classList.remove("unshow");
     })
-    function pause(){
+    menuvid.addEventListener("click",function(){
+        console.log("reiting");
+        menu2_2.classList.add("unshow");
+        menu1_2.classList.remove("unshow");
+        var xx = document.getElementById("vidioshka"); 
+        xx.pause();
+    })
+    function pauseg(){
         menu.classList.remove("unshow");
         ingame = false;
         clearInterval(spawn_coin);
+        pausestart();
     }
 
 
@@ -97,10 +105,12 @@ document.addEventListener('DOMContentLoaded', function () {
     function timerr(is){
         if(is)
         timer = setInterval(function() {
-            //if (countdown <= 0){
-            //    svg_tim("0");
-            //    alert("Game over");
-            //}
+            if (countdown-1 <= 0){
+               pauseg();
+               svg_tim("0");
+               playstop();
+               alert("Game over");
+            }
             countdown = --countdown <= 0 ? countdown_start : countdown;   
             countdownNumberEl.textContent = countdown.toString();
             
@@ -117,11 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var secundamer:HTMLElement = document.querySelector("#timer circle");
     secundamer.classList.add("animated1");
     secundamer.style.animationPlayState = "paused";
-    //secundamer.classList.remove("animated1");secundamer.classList.add("animated1");
-   // secundamer.style.animationPlayState = "paused";
-   //oprirea, inceperea animatiei svg timer
-   // var timer1 = document.querySelector(".s_t");
-   // let i = 1;
 
     function svg_tim(what){
         switch (what){
@@ -172,20 +177,22 @@ document.addEventListener('DOMContentLoaded', function () {
         public h:number;
         public w:number;
         public score:number;
-        constructor(scr,h,w){
+        public whatmoney;
+        constructor(scr,h,w,what){
             
             this.h = h;
             this.w = w;
             this.x = Math.random()*(canvas.width - this.w);
             this.y = Math.random()*(canvas.height - this.h);
             this.score = scr;
+            this.whatmoney = what;
             
             //ctx.beginPath();
             //ctx.rect(this.x,this.y , this.h, this.w);
                 ctx.clearRect( this.x, this.y, this.h, this.w);
                 this.x += 1;
                 this.y += 1;
-                ctx.drawImage(coinimg, 0, coi[get_coin()], 63, 61, this.x, this.y, this.h, this.w);
+                ctx.drawImage(coinimg, 0, obj[this.whatmoney][0], 63, 61, this.x, this.y, this.h, this.w);
             
            // ctx.fillStyle = "red";
            // ctx.fill();
@@ -200,9 +207,17 @@ document.addEventListener('DOMContentLoaded', function () {
                ||x1 >= this.x && x1 <= this.x+this.w && y1 >= this.y && y1 <= this.y+this.h
                ||x1+w1 >= this.x && x1+w1 <= this.x+this.w && y1 >= this.y && y1 <= this.y+this.h
                 ){
-                    console.log("ggg");
+                    //console.log("ggg");
                     ctx.clearRect(this.x, this.y, this.h, this.w);
                     score += this.score;
+                    console.log(this.score);
+                    if (this.score == 0){
+                        setviteza(false);
+                        setTimeout(function(){
+                            setviteza(true);
+                        },1)
+                        
+                    }
                     scor.innerHTML =  score.toString();                   
                     return true;
                 }
@@ -213,18 +228,34 @@ document.addEventListener('DOMContentLoaded', function () {
     function get_coin(){
         var n = Math.round(Math.random()*100)
         if (n >= 0 && n<=40)
-            return 0
-        else if (n >= 41 && n <= 60)
             return 1
-        else if (n >= 61 && n <= 75)
+        else if (n >= 41 && n <= 60)
             return 2
-        else if (n >= 76 && n <= 90)
+        else if (n >= 61 && n <= 75)
             return 3
-        else if (n >= 90)
+        else if (n >= 76 && n <= 90)
             return 4
+        else if (n >= 90)
+            return 5
     }
 
- 
+    var viteza_up;
+    function setviteza(is){
+        if(is){
+            speed = 40;
+            stop_cadru(directiaanimatiei);
+            move(directiaanimatiei);
+            viteza_up = setTimeout(function(){
+                speed=speed_start;
+                stop_cadru(directiaanimatiei);
+                move(directiaanimatiei);
+            },10000)
+        }else{
+            clearTimeout(viteza_up);
+    
+        }
+
+    }
 
 
 
@@ -239,17 +270,17 @@ document.addEventListener('DOMContentLoaded', function () {
     // colist.push(coo);
     // coo = new coin(100 ,30,30);
     // colist.push(coo);
-    var spawn_coin = setInterval(function(){
+    // var spawn_coin = setInterval(function(){
                         
-                            let coo = new coin(100 ,30,30);
-                            colist.push(coo);
-                            //coo = null;
+    //                         let coo = new coin(obj[Math.random()*4+1][1] ,30,30);
+    //                         colist.push(coo);
+    //                         //coo = null;
                         
-                    },coin_delta)
+    //                 },coin_delta)
 
         
-                   // spawn_coin;         
-    clearInterval(spawn_coin);
+    //                // spawn_coin;         
+    // clearInterval(spawn_coin);
 
 
     //coinimg.onload = function(){};
@@ -269,11 +300,6 @@ document.addEventListener('DOMContentLoaded', function () {
       
     //   demo();
 
-    
-    function sleepFor( sleepDuration ){
-        var now = new Date().getTime();
-        while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
-    }
 
 
 
@@ -286,10 +312,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // });
 
 
- function plusplus(ii){
-    setTimeout(function(){ii++}, 1000)
-    return ii;
- }
+//  function plusplus(ii){
+//     setTimeout(function(){ii++}, 1000)
+//     return ii;
+//  }
     function move(i:number){
         clearInterval(animashka);
         var shift = 0;          //start pe axa x din sprit
@@ -340,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // verifica daca elementele se intersecteaza cu personaj si le sterg din lista
             for (let a=0;a<colist.length;a++){
-                console.log(colist[a]);
+                //console.log(colist[a]);
                 if (colist[a].intersection(x,y,frameHeight,frameWidth)){
                     colist.splice(a,1);
                    // console.log('calcat')
@@ -372,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
+    var directiaanimatiei;
     //control WASD(!!engleze!!)
     var prev_vode:number = 0;
     document.querySelector("body").addEventListener("keypress", function(e) {       
@@ -383,25 +409,30 @@ document.addEventListener('DOMContentLoaded', function () {
         if(c == 119 && c != prev_vode)
         {
             //console.log("up");
+
             move(0)
+            directiaanimatiei=0;
             prev_vode = c;
         }
         else if(c == 115 && c != prev_vode)
             {
                // console.log("down");
                 move(1)
+                directiaanimatiei=1;
                 prev_vode = c;
             }
         else if(c == 100 && c != prev_vode)
         {
                // console.log("right");
                 move(2)
+                directiaanimatiei=2;
                 prev_vode = c;
             }
         else if(c == 97 && c != prev_vode)
             {
                // console.log("left")
                 move(3)
+                directiaanimatiei=3;
                 prev_vode = c;
             }
         if(c == 96)
@@ -412,7 +443,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     document.querySelector("body").addEventListener("keyup", function(e) {
         var c:any = e.keyCode;
-        console.log(c);
+        // console.log(c);
         if(ingame)
         if(c == 87)
         {
@@ -444,19 +475,29 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             else if(c == 80)
             {
-                pause();
+                pauseg();
                 svg_tim("0");
             }
     })
 
 
+    var xx = document.getElementById("audiostart"); 
+    
+    function playstart() { 
+        xx.play(); 
+    }
 
+    function pausestart() { 
+        xx.pause(); 
+    }
 
+    var yy = document.getElementById("audiostop"); 
+    
+    function playstop() { 
+        yy.play(); 
+    }
 
-
-
-
-
+    
 
 
     
