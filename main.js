@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     coinimg.src = 'img/coins.jpg';
     var animashka;
     var fh = new Array(0, 64, 128, 192); // date de axa y in sprite
-    //var coi:Array<number> = new Array(0,61,122,183,244) // date de axa y in sprite monete
     var x = 1;
     var y = 1;
     var pas = 3;
@@ -23,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var ingame = false;
     var colist = [];
     var countdown_start = 15; //limitele secundomerului
-    //console.log(obj[Math.round(Math.random()*4+1)][1]);
+    var timer;
+    var viteza_up;
     var scor = document.querySelector(".score");
     var newgame = document.querySelector("#newg");
     var continu = document.querySelector("#continue");
@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var countdownNumberEl = document.getElementById('countdown-number');
     var countdown = countdown_start;
     countdownNumberEl.textContent = countdown.toString();
-    var timer;
     timerr(false);
     //inscrierea cifrei in timer svgz
     function timerr(is) {
@@ -127,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function () {
         //alert("Game over");
     }
     //setarea animatiei css
-    //var style_anim = ;
     document.querySelector(".style_d").innerHTML = '.animated1{animation: countdown ' + countdown_start.toString() + 's linear infinite forwards;}';
     var secundamer = document.querySelector("#timer circle");
     secundamer.classList.add("animated1");
@@ -156,22 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     ;
-    /*
-        timer1.addEventListener("click",function(){
-            if(i==0){
-                secundamer.style.animationPlayState = "paused";
-                timerr(false);
-                i++;
-            }
-            else{
-                secundamer.style.animationPlayState = "running";
-                timerr(true);
-                i=0;
-            }
-            //console.log("rabotaet");
-        });*/
-    //timer.pauseAnimations();
-    //trei.traiincaodata//dupa inchidere/superю
     //classa monetei. ce, unde si cum
     var coin = /** @class */ (function () {
         function coin(scr, h, w, what) {
@@ -181,14 +163,10 @@ document.addEventListener('DOMContentLoaded', function () {
             this.y = Math.random() * (canvas.height - this.h);
             this.score = scr;
             this.whatmoney = what;
-            //ctx.beginPath();
-            //ctx.rect(this.x,this.y , this.h, this.w);
             ctx.clearRect(this.x, this.y, this.h, this.w);
             this.x += 1;
             this.y += 1;
             ctx.drawImage(coinimg, 0, obj[this.whatmoney][0], 63, 61, this.x, this.y, this.h, this.w);
-            // ctx.fillStyle = "red";
-            // ctx.fill();
         }
         coin.prototype.intersection = function (x1, y1, h1, w1) {
             if (this.x >= x1 && this.y >= y1 && this.x < x1 + w1 && this.y <= y1 + h1
@@ -215,9 +193,6 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         return coin;
     }());
-    function resettimer() {
-        countdown = countdown_start;
-    }
     function get_coin() {
         var n = Math.round(Math.random() * 100);
         if (n >= 0 && n <= 40)
@@ -231,7 +206,6 @@ document.addEventListener('DOMContentLoaded', function () {
         else if (n >= 90)
             return 5;
     }
-    var viteza_up;
     function setviteza(is) {
         if (is) {
             speed = 40;
@@ -247,39 +221,6 @@ document.addEventListener('DOMContentLoaded', function () {
             clearTimeout(viteza_up);
         }
     }
-    // generarea monetelor, adaugarea acestor in lista
-    // let coo = new coin(100 ,30,30);
-    // colist.push(coo);
-    // coo = new coin(100 ,30,30);
-    // colist.push(coo);
-    // var spawn_coin = setInterval(function(){
-    //                         let coo = new coin(obj[Math.random()*4+1][1] ,30,30);
-    //                         colist.push(coo);
-    //                         //coo = null;
-    //                 },coin_delta)
-    //                // spawn_coin;         
-    // clearInterval(spawn_coin);
-    //coinimg.onload = function(){};
-    // function sleep(ms) {
-    //     return new Promise(resolve => setTimeout(resolve, ms));
-    //   }
-    //   async function demo() {
-    //     console.log('Taking a break...');
-    //     await sleep(10000);
-    //     console.log('Two seconds later');
-    //   }
-    //   demo();
-    //function sleepThenAct(){ sleepFor(2000); console.log("hello js sleep !"); }
-    // var timer1 = document.querySelector(".s_t");
-    // timer1.addEventListener("click",function(){
-    //     for(let i=0;i<10;i++){
-    //         sleepFor(1000); console.log("hello js sleep !");
-    //     }
-    // });
-    //  function plusplus(ii){
-    //     setTimeout(function(){ii++}, 1000)
-    //     return ii;
-    //  }
     function move(i) {
         clearInterval(animashka);
         var shift = 0; //start pe axa x din sprit
@@ -334,11 +275,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     // console.log('calcat')
                 }
             }
-            /*
-                        colist.map(function(e){
-                            if(e.intersection(x,y,frameHeight,frameWidth))
-                                delete e;
-                        })*/
         }, 1000 / speed);
     }
     //cadru de repauz
@@ -418,14 +354,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
     });
     var xx = document.getElementById("audiostart");
-    function playstart() {
-        xx.play();
-    }
-    function pausestart() {
-        xx.pause();
-    }
+    function playstart() { xx.play(); }
+    function pausestart() { xx.pause(); }
     var yy = document.getElementById("audiostop");
-    function playstop() {
-        yy.play();
-    }
+    function playstop() { yy.play(); }
 });
