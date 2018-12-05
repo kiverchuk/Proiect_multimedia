@@ -4,35 +4,36 @@ document.addEventListener('DOMContentLoaded', function () {
                             "2":[61,200],
                             "3":[122,300],
                             "4":[183,400],
-                            "5":[244,0]
-   }`;
+                            "5":[244,0] `+ //speed moneta
+                        `}`;
 
 
     var obj = JSON.parse(monete);
-    //console.log(obj[2][1]);
-    const canvas = <HTMLCanvasElement> document.getElementById("myCanvas");
+    const canvas = <HTMLCanvasElement> document.getElementById("myCanvas");     //canvas pentru monete
     var ctx = canvas.getContext("2d");
-    const canvas2 = <HTMLCanvasElement> document.getElementById("myCanvas2");
+    const canvas2 = <HTMLCanvasElement> document.getElementById("myCanvas2");   //canvas pentru erou
     var ctx2 = canvas2.getContext("2d");
     var imageObj = new Image();
-    imageObj.src = 'img/hero3.png';
+    imageObj.src = 'img/hero3.png';                  // sprite eroului
     var coinimg = new Image();
-    coinimg.src = 'img/coins.jpg';
-    var animashka:any;
-    var fh:Array<number> = new Array(0,64,128,192) // date de axa y in sprite
-    var x:number = 1;
-    var y:number = 1;
-    var pas:number = 3;
-    var speed_start:number = 20;
-    var coin_delta:number = 5000;
-    var speed:number = speed_start;
-    var score:number = 0;
-    var ingame:boolean = false;
-    let colist:Array<coin> = [];
-    var countdown_start = 15;          //limitele secundomerului
-    var timer;
-    var viteza_up;
-
+    coinimg.src = 'img/coins.jpg';                   // sprite monetelor
+    var animashka:any;                               // functia desinarii animatiei eroului
+    var fh:Array<number> = new Array(0,64,128,192)   // date de pe axa y in sprite a eroului
+    var x:number = 1;                                //pozitia start x a  eroului
+    var y:number = 1;                                //pozitia start y a  eroului
+    var pas:number = 3;                              // pasul eroului in px
+    var coin_delta:number = 5000;                    // interval de timp a spavnului monetelor
+    var speed_start:number = 20;                     //speed Default
+    var speed:number = speed_start;                  // speed in timp real
+    var score:number = 0;                            //scor new game
+    var ingame:boolean = false;                      //intrerupatorul butoanelor de control
+    let colist:Array<coin> = [];                     // lista de obiecte "monete"
+    var countdown_start = 15;                        //limitele secundomerului
+    var timer;                                       // functia pentru timer
+    var viteza_up;                                   // functia schimbarii vitezei mentru "moneta speed"
+    var directiaanimatiei;                           // memorarea directiei animatiei
+    var spawn_coin;                                  // functia pentru spawn monetelor cu interval de timp
+ 
 
     
     var scor = document.querySelector(".score");
@@ -44,8 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var menu2_2 = document.querySelector("#allthethings2");
     var menuvid = document.querySelector(".exitvideo");
     var ok = document.querySelector(".ok");
+    var exitraport = document.querySelector(".exitraport");
+    var raport = document.querySelector(".raportb");
     
-    var spawn_coin;
+    //comande la clic pe interface
     newgame.addEventListener("click",function(){
         console.log("newg");
         menu.classList.add("unshow");
@@ -90,6 +93,16 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("fdgfh")
         pauseg(false);
     })
+    exitraport.addEventListener("click",function(){
+        document.querySelector(".container").classList.remove("unshow");
+        document.querySelector(".raport").classList.add("unshow");
+    })
+    raport.addEventListener("click",function(){
+        document.querySelector(".container").classList.add("unshow");
+        document.querySelector(".raport").classList.remove("unshow");
+    })
+
+    // schimbarea meniurilor game over si miniu standart
     function pauseg(g_o){
         if(g_o){
             document.querySelector("#allthethings3").classList.remove("unshow");
@@ -99,13 +112,10 @@ document.addEventListener('DOMContentLoaded', function () {
             menu.classList.remove("unshow");
             document.querySelector("#allthethings3").classList.add("unshow");
         }
-
         ingame = false;
         clearInterval(spawn_coin);
         pausestart();
         clearInterval(animashka);
-        
-
     }
 
 
@@ -115,8 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var countdown = countdown_start;     
     countdownNumberEl.textContent = countdown.toString(); 
 
-    timerr(false);
-    //inscrierea cifrei in timer svgz
+    //timerr(false);
     function timerr(is){
         if(is)
         timer = setInterval(function() {
@@ -132,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
-
+    // actiunile in timpul cind timer = 0
     function gameover(){
         pauseg(true);
         playstop();
@@ -144,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
         score = 0;
         scor.innerHTML = "0";
         x = 1; y = 1;
-        //alert("Game over");
         
     }
 
@@ -157,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
     secundamer.classList.add("animated1");
     secundamer.style.animationPlayState = "paused";
 
+    //lucru cu animatia svg/keyframe
     function svg_tim(what){
         switch (what){
             case "0":
@@ -172,11 +181,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 countdown = countdown_start;
                 countdownNumberEl.textContent = countdown.toString();
                 secundamer.classList.remove("animated1");
-                secundamer.style.animationPlayState = "running";
+                
                 setTimeout(function(){
                     secundamer.classList.add("animated1");
-                },1)
+                },10);
+                secundamer.style.animationPlayState = "running";
                 timerr(true);
+                console.log("svgtim9");
                 break;
         }       
     };
@@ -206,15 +217,16 @@ document.addEventListener('DOMContentLoaded', function () {
             ctx.drawImage(coinimg, 0, obj[this.whatmoney][0], 63, 61, this.x, this.y, this.h, this.w);
 
         }
-        public intersection(x1,y1,h1,w1){
+        // verifica daca suprafata personajului se intersecteaza cu moneta -> true/false
+        public intersection(x1,y1,h1,w1){  
             if( this.x >= x1 && this.y >= y1 && this.x < x1+w1 && this.y <= y1+h1 
                 ||this.x+this.w >= x1 && this.y >= y1 && this.x+this.w <= x1+w1 && this.y <= y1+h1
                 ||this.x+this.w >= x1 && this.y+this.h >=y1 && this.x+this.w <= x1+w1 && this.y+this.h <= y1+h1
                 ||this.x >= x1 && this.y+this.h >= y1 && this.x <= x1+w1 && this.y+this.h <= y1+h1
                 ||x1+w1 >= this.x && x1+w1 <= this.x+this.w && y1+h1 >= this.y &&  y1+h1 <= this.y+this.h
-               ||x1 >= this.x && x1 <= this.x+this.h && y1+h1 >= this.y && y1+h1 <= this.y+this.h
-               ||x1 >= this.x && x1 <= this.x+this.w && y1 >= this.y && y1 <= this.y+this.h
-               ||x1+w1 >= this.x && x1+w1 <= this.x+this.w && y1 >= this.y && y1 <= this.y+this.h
+                ||x1 >= this.x && x1 <= this.x+this.h && y1+h1 >= this.y && y1+h1 <= this.y+this.h
+                ||x1 >= this.x && x1 <= this.x+this.w && y1 >= this.y && y1 <= this.y+this.h
+                ||x1+w1 >= this.x && x1+w1 <= this.x+this.w && y1 >= this.y && y1 <= this.y+this.h
                 ){
                     svg_tim("9");
                     ctx.clearRect(this.x, this.y, this.h, this.w);
@@ -241,15 +253,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function get_coin(){
         var n = Math.round(Math.random()*100)
         if (n >= 0 && n<=40)
-            return 1
+            return 1                    //40% moneta 1
         else if (n >= 41 && n <= 60)
-            return 2
+            return 2                    //20% moneta 2
         else if (n >= 61 && n <= 75)
-            return 3
+            return 3                    //15% moneta 3
         else if (n >= 76 && n <= 90)
-            return 4
-        else if (n >= 90)
-            return 5
+            return 4                    //15% moneta 4
+        else if (n > 90)
+            return 5                    //10% moneta 5
     }
 
  
@@ -315,21 +327,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }else{
                 if (x <= 0)
                     x += pas;
-                if (y <= 0)
+                if (y <= 0) ``      
                     y += pas;
                 if (x >= canvas.width - frameWidth)
                     x -= pas;
                 if (y >= canvas.height - frameHeight)
                     y -= pas;
             }
-            //console.log(x+":"+y)
 
-            // verifica daca elementele se intersecteaza cu personaj si le sterg din lista
+            // verifica daca monetele se intersecteaza cu personaj, true -> le sterg din lista
             for (let a=0;a<colist.length;a++){
-                //console.log(colist[a]);
                 if (colist[a].intersection(x,y,frameHeight,frameWidth)){
                     colist.splice(a,1);
-                   // console.log('calcat')
                 }       
             }
         }, 1000/speed);
@@ -350,95 +359,81 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    var directiaanimatiei;
+    
     //control WASD(!!engleze!!)
     var prev_vode:number = 0;
     document.querySelector("body").addEventListener("keypress", function(e) {       
         var c:any = e.keyCode;
-        //console.log(c);
-        // p = 112
         if(ingame)
-        if(c == 119 && c != prev_vode)
+        if(c == 119 && c != prev_vode) // miscarea sus
         {
-            //console.log("up");
             move(0)
             directiaanimatiei=0;
             prev_vode = c;
         }
-        else if(c == 115 && c != prev_vode)
+        else if(c == 115 && c != prev_vode) //miscarea jos
             {
-               // console.log("down");
                 move(1)
                 directiaanimatiei=1;
                 prev_vode = c;
             }
-        else if(c == 100 && c != prev_vode)
+        else if(c == 100 && c != prev_vode) //miscarea dreapta
         {
-               // console.log("right");
                 move(2)
                 directiaanimatiei=2;
                 prev_vode = c;
             }
-        else if(c == 97 && c != prev_vode)
+        else if(c == 97 && c != prev_vode) //miscarea stinga
             {
-               // console.log("left")
                 move(3)
                 directiaanimatiei=3;
                 prev_vode = c;
             }
-        if(c == 96)
-        {
-            console.log(colist)
-        }
     })
 
 
 
-
+    //oprirea miscarii personajului si setara cadrului de repaus
     document.querySelector("body").addEventListener("keyup", function(e) {
         var c:any = e.keyCode;
-        // console.log(c);
         if(ingame)
-        if(c == 87)
+        if(c == 87) // stoparea cu fata in sus
         {
-           // console.log("up-stop");
             clearInterval(animashka);
             stop_cadru(0);
             prev_vode = 0;
         }
-        else if(c == 83)
+        else if(c == 83) // stoparea cu fata in jos
             {
-               // console.log("down-stop");
                 clearInterval(animashka);
                 stop_cadru(1);
                 prev_vode = 0;
             }
-        else if(c == 68)
+        else if(c == 68) // stoparea cu fata in dreapta
             {
-               // console.log("right-stop");
                 clearInterval(animashka);
                 stop_cadru(2);
                 prev_vode = 0;
             }
-        else if(c == 65)
+        else if(c == 65) // stoparea cu fata in stinga
             {
-                //console.log("left-stop")
                 clearInterval(animashka);
                 stop_cadru(3);
                 prev_vode = 0;
             }
-            else if(c == 80)
+            else if(c == 80) //aprinderea pause pe litera "p"
             {
                 pauseg(false);
                 svg_tim("0");
             }
     })
 
-
+    //setarile pentru audio, muzica in timpul jocului
     var xx = document.getElementById("audiostart"); 
     function playstart() {  xx.play(); }
     function pausestart() {  xx.pause(); }
 
+    //setarile pentru audio, sunetul "Game Over"
     var yy = document.getElementById("audiostop"); 
     function playstop() { yy.play(); }
 

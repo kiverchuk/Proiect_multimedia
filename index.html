@@ -4,10 +4,10 @@
     <script src="main.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" >
     <link rel="stylesheet" href="my.css" >
-
 </head>
 <body>
     <style type="text/css" class="style_d"></style>
+    <button class="raportb">Raport</button>
     <div class="container">
         <div style="position: relative;">Score: <div class="score" style="margin-left: 55px;margin-top: -23px;">0</div></div> 
         <div id="countdown">
@@ -41,12 +41,13 @@
                 Game Over
                 <button class="ok" style="margin-left: 20px;">OK</button>
             </div>
+            
             <audio controls id="audiostart" style="display: none;" src="music.mp3" volume="0,1" loop></audio>
             <audio controls id="audiostop" style="display: none;" src="game_over.mp3"></audio>
-        </div>
-        
+        </div>        
     </div>
-    
+    <div class="raport unshow">
+        <center><video id="vidioshka"width="400" height="300" controls src="Raport.mp4"></video><br><button class="exitraport">Exit</button></center>
+    </div>   
 </body>
-
 </html>
